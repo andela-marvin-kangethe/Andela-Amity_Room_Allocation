@@ -1,5 +1,6 @@
 \venv\
 venv\
 *.pyc
-.DS_Store
-amity.db
+\.DS_Store
+\amity.db
+\Amity.txt
