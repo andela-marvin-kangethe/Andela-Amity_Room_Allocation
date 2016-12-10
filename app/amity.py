@@ -259,7 +259,6 @@ class Amity(Storage):
 						for room in range(
 							0, len(Storage.list_of_all_rooms)):
 							if Storage.people_info[self.id_no] in Storage.list_of_all_rooms[room].Room_instance.current_members:
-								#print ">> Moving "+Storage.people_info[self.id_no]+" to ",Storage.list_of_all_rooms[room].Room_type 
 								"""
 								3b. Check all rooms that are offices and not full and not the same room.
 								"""
@@ -447,64 +446,3 @@ class Amity(Storage):
 					break	
 					return None			
 					
-if __name__ == '__main__':
-	store = Storage()
- 	amity = Amity()
-
- 	amity.createRoom("Hogwards")
- 	amity.createRoom("Narnia")
-
- 	amity.allocateRoom("marvin kang","FELLOW","YES")
- 	
- 	amity.reallocate_person(1234, "Hogwards")
-
-# 	amity.createRoom("Camelot")
-# 	amity.createRoom("Mordor")
-
-# 	for size in range(len(store.list_of_all_rooms)):
-# 		print store.list_of_all_rooms[size].Room_name
-"""
-	
- 	amity.allocateRoom("Steve jobs1","staff","yes")
- 	amity.allocateRoom("Steve jobs2","staff","yes")
- 	amity.allocateRoom("Steve jobs3","staff","yes")
- 	amity.allocateRoom("Steve jobs4","staff","yes")
- 	amity.allocateRoom("Steve jobs5","staff","yes")
- 	amity.allocateRoom("Steve jobs6","staff","yes")
- 	amity.allocateRoom("Steve jobs7","staff","yes")
-
-	amity.print_rooms("Hogwards")
-	print "Start unallocation"
-	amity.unallocated_people("Amity.txt")
-"""
-	# print "Time for reallocations"
-	# amity.reallocate_person(1234,"NARNIA")
-	# amity.print_rooms("NARNIA")
- 		
-
-# 	for rooms in range(len(store.list_of_all_rooms)):
-# 		print "\n\tName of room :\t", store.list_of_all_rooms[rooms].Room_name
-# 		print "\tType of room :\t", store.list_of_all_rooms[rooms].Room_type
-# 		print "\tCurrent occupants:\t", len(store.list_of_all_rooms[rooms].Room_instance.current_members)
-
-# 		for size in range(len(store.list_of_all_rooms[rooms].Room_instance.current_members)):
-# 			print store.list_of_all_rooms[rooms].Room_instance.current_members[size]
-		
-# 	amity.unallocated_people()
-
-# 	key = [key for key, value in Storage.people_info.items() if value == "Steve jobs"]
-# 	result = 0
-# 	for size in range(len(key)):
-# 		result = int(key[size])
-
-# 	print result
-# 	amity.reallocate_person(result, "Mordor")
-
-
-# 	for rooms in range(len(store.list_of_all_rooms)):
-# 		print "\n\tName of room :\t", store.list_of_all_rooms[rooms].Room_name
-# 		print "\tType of room :\t", store.list_of_all_rooms[rooms].Room_type
-# 		print "\tCurrent occupants:\t", len(store.list_of_all_rooms[rooms].Room_instance.current_members)
-
-# 		for size in range(len(store.list_of_all_rooms[rooms].Room_instance.current_members)):
-# 			print store.list_of_all_rooms[rooms].Room_instance.current_members[size]
