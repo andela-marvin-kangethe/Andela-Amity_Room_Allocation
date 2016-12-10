@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/andela-marvin-kangethe/Andela-Amity_Room_Allocation.svg?branch=master)](https://travis-ci.org/andela-marvin-kangethe/Andela-Amity_Room_Allocation)
+
 [![Code Climate](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badges/gpa.svg)](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation)
 
 [![Test Coverage](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badges/coverage.svg)](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/coverage)
