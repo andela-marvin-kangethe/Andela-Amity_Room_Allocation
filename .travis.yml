@@ -8,5 +8,5 @@ script:
   - nosetests
 notifications:
   slack: andela:zDaKHAj3IUjFYaCP193NvLzE
-    on_success: always
+  on_success: always
   email: false
