@@ -1,7 +1,8 @@
 
 class Office(object):
-	"""docstring for Office"""
-	
+	"""
+	docstring for Office
+	"""
 
 	def __init__(self,name = ""):
 		self.name = name
