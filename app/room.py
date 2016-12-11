@@ -6,8 +6,9 @@ from app.storage import Storage
 import random 
 
 class Room(Storage):
-	"""docstring for Room"""
 	"""
+		docstring for Room
+	
 	The length of this list cannot be more 
 	than the number of total rooms
 	"""
@@ -41,11 +42,8 @@ class Room(Storage):
 
 	"""
 	Allocate a person to a room at random depending on if the person 
-	wants allocation{ also yes for staff }. 
+	wants allocation { also yes for staff }. 
 	check if room is full.
-		NB
-			fellow are allocated either office or living space
-			staff are allocated only office.
 	"""	
 	def allocate_member_a_room(self,name = "",id_no = 0):
 		self.name = name
@@ -60,10 +58,6 @@ class Room(Storage):
 		#KEY : ID number, VALUE : NAME
 
 		Storage.people_info[self.id_no] = self.name
-
-		# print self.name," added to the system.In room : ",self.Room_name
-		# for size in range(len(self.Room_instance.current_members)):
-		# 	print self.Room_instance.current_members[size]
 
 		print "Your room allocation has been successfully!!"
 		print "Your room space is in {}.".format(self.Room_name)
