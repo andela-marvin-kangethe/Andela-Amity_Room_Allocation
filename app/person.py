@@ -8,9 +8,6 @@ import random
 
 class Person(Storage):
 	"""docstring for Person"""
-					
-
-
 	def __init__(self,name="",jobType = "",wantsRoom = "NO",choice = 1,new_id_no = 0):
 		self.name = name
 		self.jobType = jobType
