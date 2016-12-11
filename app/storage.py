@@ -16,7 +16,6 @@ class Storage(object):
 	people_info 						store the name of person as value and id number as key.
 	unallocated_people_info				store people instance whom want room but don't have room allocated currently.
 	"""
-
 	def __init__(self):
 		pass
 		
