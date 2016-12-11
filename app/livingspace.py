@@ -1,9 +1,7 @@
 
 class LivingSpace(object):
 	"""docstring for Living space"""
-	# current_members = []
-	# maximum_capacity = 4
-
+	
 	def __init__(self,name = ""):
 		self.name = name
 		self.current_members = []
