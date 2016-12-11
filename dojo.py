@@ -84,11 +84,6 @@ class MyInteractive (cmd.Cmd):
         name = str(fname)+" "+str(lname)
         job = args["<role>"]
 
-        #if len(args) > 3:
-        #    wants_accomodation = args["<wants_accomodation>"]
-        #else:
-        #    wants_accomodation = "NO" 
-
         wants_accomodation = args["<wants_accomodation>"] or "NO"       
     	
         #Convert F to Fellow and S to Staff.
@@ -173,6 +168,7 @@ class MyInteractive (cmd.Cmd):
         """Quits out of Interactive Mode."""
 
         print('Good Bye!')
+        print('And come back soon. Thank You')
         exit()
 
 opt = docopt(__doc__, sys.argv[1:])
