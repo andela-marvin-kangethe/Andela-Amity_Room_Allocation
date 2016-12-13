@@ -10,3 +10,11 @@
 
 # Andela-Amity_Room_Allocation
 This program is used to allocated fellows and staffs, available office and livingspace rooms.
+
+
+# Testing
+To run the test cases files, use the command 
+
+nosetests --exe --with-coverage --cover-erase --cover-package=tests/
+
+
