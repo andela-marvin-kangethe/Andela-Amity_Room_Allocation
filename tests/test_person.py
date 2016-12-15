@@ -4,10 +4,11 @@ import unittest
 from mock import Mock, patch
 
 
-class Test(unittest.TestCase):
+class TestPerson(unittest.TestCase):
 	
 	def setUp(self):
 		self.person = Person("Marvin","FELLOW","YES")
+		self.person.id_no = 2234
 
 	def test_instance_valriables(self):
 		self.assertNotEqual(self.person.name,"",msg = "Invalid name credentials.")	
@@ -20,28 +21,45 @@ class Test(unittest.TestCase):
 
 	@patch('app.storage')	
 	def test_person_not_in_system(self,test_storage):
-		test_storage.people_info.return_value = {12345678 : "marvin kangethe", 98765432 : "john doe"}
-		self.person.id_no = 22345678
+		#test_storage.people_info.return_value = {12345678 : "marvin kangethe", 98765432 : "john doe"}
+
+		Storage.people_info = {1234 : "marvin kangethe", 9876 : "john doe"}
+		
+		
 		self.assertEqual(
-			type(self.person.id_no),
-			int, msg = "ID numbers must have an integer format.")
+			type(self.person.id_no),int)
 		
 		self.assertFalse(
-			bool(test_storage.people_info.return_value.has_key(self.person.id_no)),
-			msg = "Person already in the system.")
+			bool(Storage.people_info.has_key(self.person.id_no)))
  
 		
 	@patch('app.storage')
 	def test_add_member_to_system(self,test_storage):
-		test_storage.people_info.return_value = {12345678 : "Marvin Kangethe", 98765432 : "John Doe"}
+		#test_storage.people_info.return_value = {12345678 : "Marvin Kangethe", 98765432 : "John Doe"}
+		
+		Storage.people_info = {1234 : "Marvin Kangethe", 9876 : "John Doe"}
 		result = self.person.add_member_to_system()
 
 		if result == "Member added successfully":
-			self.assertTrue(test_storage.people_info.has_key(self.person.id_no),msg = "The person hasn't been added  yet.")
+			self.assertTrue(Storage.people_info.has_key(
+				self.person.id_no))
 		else:
-			self.assertNotEqual(self.person.name, "", msg = "Cannot add an empty person to the system.")
-			self.assertNotEqual(self.person.id_no, 0, msg = "Cannot add a person without valid ID to the system.")
-			self.assertTrue(test_storage.people_info.has_key(self.person.id_no), msg = "The person cannot be added to the system.")	
+			self.assertNotEqual(
+				len(self.person.name), 0)
+			
+			self.assertNotEqual(
+				self.person.id_no, 0)
+			
+			self.assertTrue(
+				Storage.people_info.has_key(self.person.id_no))	
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
+
+
+
+
+
+
+
+

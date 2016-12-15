@@ -1,5 +1,6 @@
 from app.amity import Amity
 import unittest
+from app.storage import Storage
 from mock import Mock,patch
 
 class TestAmity(unittest.TestCase):
@@ -9,33 +10,36 @@ class TestAmity(unittest.TestCase):
 	def setUp(self):
 		self.amity = Amity()
 	
-	@patch('app.storage')	
-	def test_room_creation(self,test_storage):
-		test_storage.list_of_all_rooms.return_value = ["CAMELOT","NARNIA"]
-		result = Mock()
-		result.room_name.return_value = "HOGWARDS"
-		print test_storage.list_of_all_rooms.return_value
-		self.result = self.amity.createRoom(result.room_name.return_value)
-		print self.amity.room_name
-		print test_storage.list_of_all_rooms.return_value
+	def test_room_creation(self):
+		size = len(Storage.list_of_all_rooms)
+		if self.amity.createRoom("Hogwards") == "Room created successfully!!":
 
-		if self.result != "Room created successfully!!":
-			self.assertNotEqual(
-				self.amity.room_name, "", msg = "Cannot create empty room")
-
-			self.assertNotIn(
-				self.amity.room_name,
-				test_storage.list_of_all_rooms.return_value,
-				msg = "Room with that name already exist."
-				)
-			print test_storage.list_of_all_rooms.return_value
+			self.assertEqual(len(Storage.list_of_all_rooms), size+1)
 		else:
-			self.assertIn(
-				self.amity.room_name,
-				test_storage.list_of_all_rooms.return_value,
-				msg = "Room with that name already exist."
-				)	
+		
+			self.assertEqual(len(Storage.list_of_all_rooms), size)
+	
+	def test_room_allocation(self):
+		size = len(Storage.people_info)
 
+		if self.amity.allocateRoom(
+			" Marvin Jones","FELLOW","YES") == "Your room allocation has been successfully!!":
+
+			self.assertEqual(len(Storage.people_info), size +1)
+
+
+	def test_room_reallocation(self):
+		size = len(Storage.people_info)
+
+		if self.amity.allocateRoom(
+			1234, "Hogwards") == "Reallocation successfull!! ":
+
+			self.assertTrue(Storage.people_info.has_key(1234))
+			self.assertEqual(len(Storage.people_info), size)
+		else:
+		
+			self.assertFalse(Storage.people_info.has_key(1234))
+			self.assertEqual(len(Storage.people_info), size)
 
 	# def test_room_allocation(self):
 	# 	self.result = self.amity.allocateRoom("","")
