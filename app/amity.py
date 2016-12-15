@@ -18,29 +18,36 @@ class Amity(Storage):
 	Check same names are not used.{ UPPERCASE all room names. }
 	Do incrementation on Total_no_of_rooms {Done in room class. }
 	"""
-	def createRoom(self,room_name = ""):
+	def createRoom(self,room_name = "", room_type = ""):
 		self.room_name = room_name.upper()
+		if room_type.upper() == "O":
+			self.room_type = "OFFICE"
+		elif room_type.upper() == "L":
+			self.room_type = "LIVINGSPACE"
+		else:
+			self.room_type = room_type.upper()
+
 		result = False
 		Result = ""
 
 		for rooms in range(len(Storage.list_of_all_rooms)):
-			if self.room_name == Storage.list_of_all_rooms[rooms].Room_name:
+			if self.room_name == Storage.list_of_all_rooms[rooms].room_name:
 				#Check that the room already exist.
 				result = True
 
 		if  self.room_name != "" and result != True :#:
 			#Create instance of room class
-			room_type = random.choice(["OFFICE","LIVINGSPACE"])
-			self.room = Room(self.room_name, room_type)
+			#room_type = random.choice(["OFFICE","LIVINGSPACE"])
+			self.room = Room(self.room_name, self.room_type)
 
 			#Save instance of room in list of all rooms
 
 			Storage.list_of_all_rooms.append(self.room)	
 
-			value = "\t{}\t\t[ {} ]\tcreated successfully!!".format(self.room.Room_name, self.room.Room_type)
+			value = "\t{}\t\t[ {} ]\tcreated successfully!!".format(self.room.room_name, self.room.room_type)
 			Result =  "Room created successfully!!"
 		else:
-			value =  "Room called {} failed to create.".format(self.room.Room_name)
+			value =  "Room called {} failed to create.".format(self.room_name)
 		print value	
 		return Result	
 
@@ -125,10 +132,10 @@ class Amity(Storage):
 
 		#Check number of people in the system doesn't pass the available room spaces
 		if len(Storage.people_info) <= Storage.total_no_of_rooms and Storage.total_no_of_rooms > 0:
-			if RoomToPerson[randomRoom.Room_type] == self.jobType:
+			if RoomToPerson[randomRoom.room_type] == self.jobType:
 				#check the room is not full 
 
-				if randomRoom.Room_instance.isFull() == True:
+				if randomRoom.room_instance.isFull() == True:
 					if self.incrementor < 15:
 						self.randomRoomAllocator(
 							self.name, self.jobType, self.wantsRoom,self.id_no)
@@ -148,6 +155,7 @@ class Amity(Storage):
 					if not Storage.people_info.has_key(self.id_no):
 						randomRoom.allocate_member_a_room(self.name,self.id_no)
 
+
 					else:
 						#print "The person has room already allocated."
 						if self.incrementor < 15:
@@ -160,7 +168,11 @@ class Amity(Storage):
 
 								print "Sorry!! We couldn't find you a room." 
 								print "Your ID is {}. Keep it safe.".format(self.id_no)
-								print "We will let you know, when room is free."	
+								print "We will let you know, when room is free."
+							else:
+							
+								return "Your room allocation has been successfully!!"	
+		
 
 			else:
 				#incrementor can be any number. default is 15.
@@ -177,6 +189,9 @@ class Amity(Storage):
 						print "Sorry!! We couldn't find you a room." 
 						print "Your ID is {}. Keep it safe.".format(self.id_no)
 						print "We will let you know, when room is free."
+					else:
+						
+						return "Your room allocation has been successfully!!"	
 
 				else:
 					#Store only id number for the person
@@ -222,9 +237,9 @@ class Amity(Storage):
 
 		for rooms in range(len(Storage.list_of_all_rooms)):
 			roomInstance = Storage.list_of_all_rooms[rooms]
-			roomType = Storage.list_of_all_rooms[rooms].Room_type
-			isFull = Storage.list_of_all_rooms[rooms].Room_instance.isFull()
-			members = Storage.list_of_all_rooms[rooms].Room_instance.current_members
+			roomType = Storage.list_of_all_rooms[rooms].room_type
+			isFull = Storage.list_of_all_rooms[rooms].room_instance.isFull()
+			members = Storage.list_of_all_rooms[rooms].room_instance.current_members
 			if roomType == self.jobtype and isFull == False:
 				if not Storage.people_info.has_key(self.id_no):
 					roomInstance.allocate_member_a_room(self.name,self.id_no)
@@ -234,77 +249,112 @@ class Amity(Storage):
 		return result		
 
 
-	def reallocate_person(self,id_no = 0,New_Room_name = ""):
+	def reallocate_person(self, id_no = 0, new_room_name = ""):
 		self.id_no = id_no
-		self.New_Room_name = New_Room_name.upper()
-		"""
-		1.	Check if the id provided is in the people info dictionary
-			and the person is not already allocated to the room he/she
-			wants reallocation to.
-		"""
+		self.name_of_id_owner = ""
+		self.new_room_name = new_room_name.upper()
 
-		if Storage.people_info.has_key(self.id_no):
-			"""
-			2. Check if the room he/she wants allocation to exist
-			"""
-			if Storage.people_info[self.id_no] not in Storage.list_of_unallocated_people:
+		self.new_room_type = None
+		self.new_room_members = None
 
-				for rooms in range(
-					0, len(Storage.list_of_all_rooms)):
-					if Storage.list_of_all_rooms[rooms].Room_name == self.New_Room_name:
-						"""
-						3.	Check if there is a room available for rellocation
-							3a. Get the job type of the person with the id
-						"""
-						for room in range(
-							0, len(Storage.list_of_all_rooms)):
-							if Storage.people_info[self.id_no] in Storage.list_of_all_rooms[room].Room_instance.current_members:
-								"""
-								3b. Check all rooms that are offices and not full and not the same room.
-								"""
-								my_room = Storage.list_of_all_rooms[rooms].Room_name
-								my_room_type = Storage.list_of_all_rooms[rooms].Room_type
-								my_room_mates = Storage.list_of_all_rooms[rooms].Room_instance.current_members
-
-								for otherRooms in range(len(Storage.list_of_all_rooms)):
-									if  Storage.list_of_all_rooms[otherRooms].Room_name != my_room \
-										and Storage.list_of_all_rooms[otherRooms].Room_type == my_room_type \
-										and Storage.list_of_all_rooms[otherRooms].Room_instance.isFull() != True \
-										and Storage.people_info[self.id_no] in my_room_mates:
-
-										print "Current room is {}.and i passed {}".format(my_room, self.New_Room_name)
-										print ">>> Moving you to {}".format(Storage.list_of_all_rooms[otherRooms].Room_name)
-
-										print Storage.people_info," ",self.New_Room_name," ",Storage.people_info[self.id_no]," ",my_room_mates
-											
-										my_room_mates.remove(Storage.people_info[self.id_no])
-										Storage.list_of_all_rooms[otherRooms].Room_instance.current_members.append(Storage.people_info[self.id_no])
-										print  "Reallocation successfull!! "
-										return "Reallocation successfull!! "
-									else:
-										if otherRooms+1 == len(Storage.list_of_all_rooms):
-											print Storage.people_info," ",self.New_Room_name," ",Storage.people_info[self.id_no]," ",my_room_mates
-											print "Sorry!! We can't reallocate you at the current time."
-										else:
-											continue	
-							else:
-								if room+1 == len(Storage.list_of_all_rooms):
-									break
-									#print "No person with that id is allocated a room."
-								else:
-									continue	
-
-										#Now remove person in original room and add in the new room current members.
-					else:
-						continue
-						#print "No room with that name exists."
+		#Deal with new room stuff.
+		for rooms in range(len(Storage.list_of_all_rooms)):
+			if Storage.list_of_all_rooms[rooms].room_name == self.new_room_name:
+				self.new_room_type = Storage.list_of_all_rooms[rooms].room_type
+				self.new_room_members = Storage.list_of_all_rooms[rooms].room_instance.current_members
 			else:
-				print "You have not been allocated room yet."
-				print "Wait until have room allocation."				
-		else:
-			print "Invalid id number provided."
-			print "Provide correct details and try again."	
-		return ""
+				continue
+
+		#Deal with id stuff		
+		if Storage.people_info.has_key(int(self.id_no)):
+			self.name_of_id_owner = Storage.people_info[int(self.id_no)]
+
+
+		#Reallocate person.
+		try:
+			for rooms in range(0, len(Storage.list_of_all_rooms)):
+				if self.name_of_id_owner in Storage.list_of_all_rooms[rooms].room_instance.current_members:
+
+					Storage.list_of_all_rooms[rooms].room_instance.current_members.remove(self.name_of_id_owner)
+					print "Person removed."
+					break
+
+			for rooms in range(0, len(Storage.list_of_all_rooms)):
+				if Storage.list_of_all_rooms[rooms].room_name != self.new_room_name \
+				and Storage.list_of_all_rooms[rooms].room_type == self.new_room_type:
+
+					self.new_room_members.append(self.name_of_id_owner)
+					print "Person added"
+					break
+
+		except Exception as e:
+			print "Sorry!! An error has occured. Try again later"	
+						
+
+
+		# #Check id passed exists in the system.
+		# if Storage.people_info.has_key(int(self.id_no)):
+		# #if self.id_no in Storage.people_info:
+		# 	#Set the name of the owner of the id number.
+		# 	self.name_of_id_owner = Storage.people_info[int(self.id_no)]
+		# 	#Get room details of the new room name
+		# 	for rooms in range(0, len(Storage.list_of_all_rooms)):
+		# 		#Check the room name is same with new room name
+		# 		print Storage.list_of_all_rooms[rooms].room_name," ",self.new_room_name
+		# 		print Storage.list_of_all_rooms[rooms].room_instance.current_members
+		# 		print self.name_of_id_owner
+		# 		print "\n"
+		# 		if self.name_of_id_owner in Storage.list_of_all_rooms[rooms].room_instance.current_members:
+		# 			#Set room type and room members.
+		# 			self.room_name = Storage.list_of_all_rooms[rooms].room_name
+		# 			self.room_type = Storage.list_of_all_rooms[rooms].room_type
+		# 			self.room_members = Storage.list_of_all_rooms[rooms].room_instance.current_members
+		# 			#Check for room to allocate the person.
+		# 			for otherRooms in range(
+		# 				0, len(Storage.list_of_all_people)):
+		# 				other_room_name = Storage.list_of_all_rooms[otherRooms].room_name
+		# 				other_room_type = Storage.list_of_all_rooms[otherRooms].room_type
+		# 				other_room_members = Storage.list_of_all_rooms[otherRooms].room_instance.current_members
+						
+		# 				print other_room_name," ",self.new_room_name, " ",other_room_name != self.new_room_name
+		# 				print other_room_type," ",self.room_type, " ",other_room_type == self.room_type
+		# 				print "\n"
+		# 				if  other_room_name != self.new_room_name \
+		# 				and other_room_type == self.room_type:
+		# 				# and self.name_of_id_owner not in other_room_members:
+		# 					#remove member from the old room.
+		# 					print ">>Moving you to room : {}".format(
+		# 						self.room_name)
+		# 					print self.room_members
+		# 					print other_room_members
+		# 					self.room_members.remove(self.name_of_id_owner)
+		# 					#append member to new room
+		# 					other_room_members.append(self.name_of_id_owner)
+		# 					print self.room_members
+		# 					print other_room_members
+							
+		# 					#print success, message.
+		# 					print  "Reallocation successfull!! "
+		# 					return "Reallocation successfull!! "
+
+		# 				elif otherRooms +1 == len(Storage.list_of_all_rooms):
+		# 					print "Sorry!! We can't reallocate you at current time."
+		# 					return None
+		# 				else:
+		# 					continue		
+
+
+
+		# 		elif rooms +1 == len(Storage.list_of_all_rooms):
+		# 			print "Sorry!! We can't reallocate you at this time.."
+		# 			return None	
+		# 		else:
+		# 			continue	
+		# else:
+		# 	print "Sorry!! We can't reallocate you at this time."
+		# 	return None	
+
+	
 				
 	"""
 	Load all people from a file. and does the allocations.
@@ -328,6 +378,9 @@ class Amity(Storage):
 					wantsroom = content[3] or "NO"
 					print "\t{} {} {}".format(name,job,wantsroom)
 					self.allocateRoom(name,job,wantsroom)
+		else:
+			
+			print "No file with that name exist."			
 
 
 
@@ -368,15 +421,16 @@ class Amity(Storage):
 	Save all content on an sqlite specified database
 	if create a new sqlite db of name wanted.
 	"""
-	def save_state(self, database = "sqlite_db"):
+	def save_state(self, database = "sqlite.db"):
 		self.db.Save(database)	
 
 
 	"""
 	Load all content from db given. 
 	"""
-	def load_state(self,database):
-		self.db.Load(database)	
+	def load_state(self,database = "sqlite"):
+		self.db.Load(database)
+
 
 	def allocated_people(self, filename):
 		self.filename = filename
@@ -392,23 +446,24 @@ class Amity(Storage):
 		#Write on the file.
 		if len(Storage.list_of_all_rooms)>0:
 			for size in range(len(Storage.list_of_all_rooms)):
-				value = "\tRoom name :\t {}\n".format(
-					Storage.list_of_all_rooms[size].Room_name)
+				value = "\tRoom name :\t {}\n\tRoom type :\t {}\n".format(
+					Storage.list_of_all_rooms[size].room_name,
+					Storage.list_of_all_rooms[size].room_type)
 				self.file.write(value)
 				print value
 				self.file.write("-"*60)
 				self.file.write("\n")
 				print "-"*60
 				#Check the room is not empty
-				if len(Storage.list_of_all_rooms[size].Room_instance.current_members)>0:
+				if len(Storage.list_of_all_rooms[size].room_instance.current_members)>0:
 					for member in range(len(
-						Storage.list_of_all_rooms[size].Room_instance.current_members)):
+						Storage.list_of_all_rooms[size].room_instance.current_members)):
 						value = "\t{}. {}".format(member+1,
-							Storage.list_of_all_rooms[size].Room_instance.current_members[member])
+							Storage.list_of_all_rooms[size].room_instance.current_members[member])
 						self.file.write(value)
 						self.file.write(" \n")
 						print value+" \n"
-					self.file.write(" \n")
+					self.file.write(" \n \n")
 						 
 				else:
 					value = "No members currently allocated this room.\n\t\tSad :( "
@@ -429,20 +484,22 @@ class Amity(Storage):
 	def print_rooms(self, room_name):
 		self.room_name = room_name.upper()
 		for size in range(len(Storage.list_of_all_rooms)):
-			if self.room_name == Storage.list_of_all_rooms[size].Room_name:
-				if len(Storage.list_of_all_rooms[size].Room_instance.current_members) > 0:
+			if self.room_name == Storage.list_of_all_rooms[size].room_name:
+				if len(Storage.list_of_all_rooms[size].room_instance.current_members) > 0:
 					for rooms in range(
 						0, len(
-							Storage.list_of_all_rooms[size].Room_instance.current_members)):
+							Storage.list_of_all_rooms[size].room_instance.current_members)):
 						print "{}. {}".format(
-							rooms+1, Storage.list_of_all_rooms[size].Room_instance.current_members[rooms])
+							rooms+1, Storage.list_of_all_rooms[size].room_instance.current_members[rooms])
 				else:
 					print "Room is empty."
 					break
 					return None		
 			else:
 				if size+1 == len(Storage.list_of_all_rooms):
-					print "Sorry!! That room doesn't exist."
+					#print "Sorry!! That room doesn't exist."
 					break	
 					return None			
 					
+
+
