@@ -1,18 +1,9 @@
 [![Build Status](https://travis-ci.org/andela-marvin-kangethe/Andela-Amity_Room_Allocation.svg?branch=develop)](https://travis-ci.org/andela-marvin-kangethe/Andela-Amity_Room_Allocation)
-
-[![Coverage Status](https://coveralls.io/repos/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badge.svg?branch=develop)](https://coveralls.io/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation?branch=develop)
-
-[![Code Climate](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badges/gpa.svg)](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation)
-
-[![Test Coverage](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badges/coverage.svg)](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/coverage)
-
-[![Issue Count](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badges/issue_count.svg)](https://codeclimate.com/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation)
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d8f495a7f1d64cdda55984b43ae6614a)](https://www.codacy.com/app/marvin-kangethe/Andela-Amity_Room_Allocation?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andela-marvin-kangethe/Andela-Amity_Room_Allocation&amp;utm_campaign=Badge_Grade)
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/d8f495a7f1d64cdda55984b43ae6614a)](https://www.codacy.com/app/marvin-kangethe/Andela-Amity_Room_Allocation?utm_source=github.com&utm_medium=referral&utm_content=andela-marvin-kangethe/Andela-Amity_Room_Allocation&utm_campaign=Badge_Coverage)
-
 [![Code Health](https://landscape.io/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/develop/landscape.svg?style=flat)](https://landscape.io/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/develop)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/andela-marvin-kangethe/Andela-Amity_Room_Allocation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/andela-marvin-kangethe/Andela-Amity_Room_Allocation/?branch=develop)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Andela-Amity_Room_Allocation
 
