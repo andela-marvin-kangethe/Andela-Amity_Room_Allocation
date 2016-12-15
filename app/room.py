@@ -45,9 +45,11 @@ class Room(Storage):
 	wants allocation { also yes for staff }. 
 	check if room is full.
 	"""	
-	def allocate_member_a_room(self,name = "",id_no = 0):
+	def allocate_member_a_room(self,name = "",id_no = 0, room_type = ""):
 		self.name = name
 		self.id_no = id_no
+		self.list = {"FELLOW":"LIVINGSPACE","STAFF":"OFFICE"}
+		self.room_type = room_type
 
 		#1. Add to the list of current occupents in the room instance
 
@@ -59,8 +61,8 @@ class Room(Storage):
 
 		Storage.people_info[self.id_no] = self.name
 
-		print "Your room allocation has been successfully!!"
-		print "Your room space is in {}.".format(self.room_name)
+		print "Your room allocation has been successfull!!"
+		print "Your {} space is in {}.".format(self.list[self.room_type],self.room_name)
 		print "Your ID number is {}.".format(self.id_no)
 		print "Keep it safe and Welcome to the Dojo!!\n"
 		return "Your room allocation has been successfully!!"
