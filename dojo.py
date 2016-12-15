@@ -5,7 +5,7 @@ This file uses docopt with the built in cmd module to
 run the application in interactive mode.
 
 Usage:
-    Dojo CREATE_ROOM <room_name>...
+    Dojo CREATE_ROOM (<room_name> <room_type>)...
     Dojo ADD_PERSON <first_name> <last_name> <role> [<wants_accomodation>]
     Dojo REALLOCATE_PERSON <person_identifier> <new_room_name>
     Dojo LOAD_PEOPLE <filename>
@@ -14,6 +14,7 @@ Usage:
     Dojo PRINT_ROOM <room_name>
     Dojo SAVE_STATE [<sqlite_database>]
     Dojo LOAD_STATE <sqlite_database>
+    Dojo INFO
     Dojo (-i | --interactive)
     Dojo (-h | --help | --version)
 
@@ -61,18 +62,64 @@ def docopt_cmd(func):
 
 class MyInteractive (cmd.Cmd):
     intro = 'Welcome to my interactive program!' \
-        + ' (type help for a list of commands.)'
+        + ' (type help for a list of commands.)\n' \
+        + ' (type info for a brief description of commands.)'
     prompt = '>>> '
     file = None
 
+
+    @docopt_cmd
+    def do_info(self, args):
+        """Usage: INFO
+        """
+    print "\tWelcome to info menu."
+    print "I will provide an example of how to use the commands.\n"
+    print "\tcreate_room Hogwards o narnia l indila o\n."
+    print "This creates 3 rooms.Each room is followed with either 'o' or 'f'."
+    print "'o' means office and 'l' is livingspace.\n"
+
+    print "\tadd_person john doe s \n."
+    print "\tadd_person john doe f y/n\n."
+    print "This adds the person to the system, and allocates him room depending on role."
+    print "His role can be 's' meaning staff or 'f' meaning fellow."
+    print "Staff are allocated room automatic. But for fellow, you must specify using y or n for room allocation.\n"
+
+    print "\treallocate_person 1234 narnia"
+    print "This moves the person with that id to the room specified.\n"
+
+    print "\tprint_allocated\n"
+    print "This print all the people allocated in the all the rooms."
+    print "To save that data in file. Use: print_allocated filename \n"
+
+    print "\tprint_unallocated\n"
+    print "This print all the people unallocated."
+    print "To save that data in file. Use: print_unallocated filename \n"
+
+    print "\tload_people data.txt\n"
+    print "This loads all the people from a file called 'data.txt' and allocates them room if any."
+    print "\tprint_room narnia\n"
+    print "This print all the people allocated in a specified room.\n"
+
+    print "\tsave_state Amity\n"
+    print "This creates a database and saves all the system data in database called Amity."
+    print "Use any name for database. Not case sensitive.\n"
+
+    print "\tload_state Amity\n"
+    print "This loads all the data from database called Amity."
+    print "The database must have been created before.\n"
+
+
+
     @docopt_cmd
     def do_create_room(self, args):
-        """Usage: CREATE_ROOM <room_name>..."""
+        """Usage: CREATE_ROOM (<room_name> <room_type>)..."""
 
-        List = args["<room_name>"]
-        for rooms in range(len(List)):
-            if type(rooms) is int:
-                amity.createRoom(List[rooms])
+        Room_name_list = args["<room_name>"]
+        Room_type_list = args["<room_type>"]
+        for rooms in range(len(Room_name_list)):
+            if type(rooms) is int and Room_type_list[rooms].upper() in ["O","L","OFFICE","LIVINGSPACE"]:
+                amity.createRoom(Room_name_list[rooms], Room_type_list[rooms])
+
 
     @docopt_cmd
     def do_add_person(self, args):
@@ -102,7 +149,8 @@ class MyInteractive (cmd.Cmd):
                 print "Job can only be Staff or Fellow. Not case sensitive."    
         else:
             print "Please use both first and last names."    
-                
+       
+   
     @docopt_cmd
     def do_reallocate_person(self, args):
         """Usage: REALLOCATE_PERSON <person_identifier> <new_room_name>
