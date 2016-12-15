@@ -5,4 +5,5 @@ venv\
 *\amity.db
 *\Amity.txt
 *\Quty.db
-*\.coverage
+*\*.DB
+*\*.db
