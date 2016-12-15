@@ -1,4 +1,6 @@
 import sqlite3
+import os
+import sys
 from app.storage import Storage
 from app.room import Room
 from app.person import Person
@@ -19,7 +21,7 @@ class Database(Storage):
 		self.closeDB()
 
 	def openDB(self):
-		self.db = sqlite3.connect(self.db_name)
+		self.db = sqlite3.connect(self.db_name.upper())
 		self.cursor = self.db.cursor()
 	
 	def closeDB(self):
@@ -67,6 +69,7 @@ class Database(Storage):
 
 		self.db.commit()
 
+
 		self.closeDB()	
 
 	def insert_room_data_into_db(self):
@@ -75,28 +78,29 @@ class Database(Storage):
 		try:
 			if len(Storage.list_of_all_rooms) > 0:
 				for rooms in range(0, len(Storage.list_of_all_rooms)):
-					Room_Name = Storage.list_of_all_rooms[rooms].Room_name
-					Room_Type = Storage.list_of_all_rooms[rooms].Room_type
-					Room_Member = Storage.list_of_all_rooms[rooms].Room_instance.current_members
-					for rooms in range(len(Room_Member),6):
-						Room_Member.append("")
+					room_Name = Storage.list_of_all_rooms[rooms].room_name
+					room_Type = Storage.list_of_all_rooms[rooms].room_type
+					room_Member = Storage.list_of_all_rooms[rooms].room_instance.current_members
+					for rooms in range(len(room_Member),6):
+						room_Member.append("")
 					self.cursor.execute('''
 				        INSERT INTO Rooms VALUES(?,?,?,?,?,?,?,?) ''',(
-				        	Room_Name, 
-				        	Room_Type,
-				        	Room_Member[0],
-				        	Room_Member[1],
-				        	Room_Member[2],
-				        	Room_Member[3],
-				        	Room_Member[4],
-				        	Room_Member[5]))
+				        	room_Name, 
+				        	room_Type,
+				        	room_Member[0],
+				        	room_Member[1],
+				        	room_Member[2],
+				        	room_Member[3],
+				        	room_Member[4],
+				        	room_Member[5]))
 					self.db.commit()
 
-					for members in range(len(Room_Member)):
+					for members in range(len(room_Member)):
 						self.cursor.execute('''
-				        	INSERT INTO Room_Members VALUES(?,?) ''',(Room_Name, Room_Member[members]))
+				        	INSERT INTO Room_Members VALUES(?,?) ''',(room_Name, room_Member[members]))
 						self.db.commit()
 
+			print "Data is being saved. please wait!!"			
 		except Exception as e:
 			raise e
 		self.closeDB()
@@ -107,22 +111,22 @@ class Database(Storage):
 		try:
 			if len(Storage.list_of_all_people) > 0:
 				for pple in range(0, len(Storage.list_of_all_people)):
-					Person_Name = Storage.list_of_all_people[pple].name
-					Person_Type = Storage.list_of_all_people[pple].jobType
-					Person_id = Storage.list_of_all_people[pple].id_no
-					Person_wants_room = Storage.list_of_all_people[pple].wantsRoom
-					Person_is_allocated = Storage.list_of_all_people[pple].andelan.is_allocated(Person_id)
+					person_Name = Storage.list_of_all_people[pple].name
+					person_Type = Storage.list_of_all_people[pple].jobType
+					person_id = Storage.list_of_all_people[pple].id_no
+					person_wants_room = Storage.list_of_all_people[pple].wantsRoom
+					person_is_allocated = Storage.list_of_all_people[pple].andelan.is_allocated(person_id)
 
 					self.cursor.execute('''
 				        INSERT INTO Person VALUES(?,?,?,?,?) ''',(
-				        	Person_Name, 
-				        	Person_id, 
-				        	Person_Type, 
-				        	Person_wants_room, 
-				        	Person_is_allocated)
+				        	person_Name, 
+				        	person_id, 
+				        	person_Type, 
+				        	person_wants_room, 
+				        	person_is_allocated)
 				        )
 					self.db.commit()
-
+			print "Data is saved in database. Thank you!! "		
 
 		except Exception as e:
 			raise e
@@ -143,7 +147,9 @@ class Database(Storage):
 				Storage.list_of_unallocated_people.append(int(rows[1]))
 				Storage.unallocated_people_info[int(rows[1])] = str(rows[0])
 		except Exception as e:
-			raise e
+			print "Sorry!! An error has occured. "
+			os.remove(self.db_name)
+			return None
 		self.closeDB()
 
 	def retieve_data_from_db_for_allocated(self):
@@ -159,7 +165,10 @@ class Database(Storage):
 			for rows in data:
 				Storage.list_of_allocated_people.append(str(rows[0]))
 		except Exception as e:
-			raise e
+			print "Sorry!! An error has occured. "
+			os.remove(self.db_name)
+			return None
+			
 		self.closeDB()
 
 	def retieve_data_from_db_for_all_rooms(self):
@@ -184,13 +193,15 @@ class Database(Storage):
 				room = Room(new_room_name, new_room_type)
 				for mem in range(len(MyList)):
 					if MyList[mem] != "":
-						room.Room_instance.current_members.append(str(MyList[mem]))
+						room.room_instance.current_members.append(str(MyList[mem]))
 				
 				Storage.list_of_all_rooms.append(room)
 
 			#print "\n",Storage.list_of_allocated_people	
 		except Exception as e:
-			raise e
+			print "Sorry!! An error has occured. "
+			os.remove(self.db_name)
+			return None
 		self.closeDB()
 
 	def retieve_data_from_db_for_people_info(self):
@@ -204,7 +215,9 @@ class Database(Storage):
 			for rows in data:
 				Storage.people_info[rows[1]] = str(rows[0])
 		except Exception as e:
-			raise e
+			print "Sorry!! An error has occured. "
+			os.remove(self.db_name)
+			return None
 		self.closeDB()	
 	
 	def retieve_data_from_db_for_all_people(self):
@@ -219,26 +232,44 @@ class Database(Storage):
 				Storage.list_of_all_people.append(pp)
 
 		except Exception as e:
-			raise e
+			print "Sorry!! An error has occured. "
+			os.remove(self.db_name)
+			return None
 		self.closeDB()
 
 	def clear_tables(self):
-		pass
+		self.openDB()
+		try:
+			self.cursor.execute('''DELETE FROM Person''')
+			self.cursor.execute('''DELETE FROM Rooms''')
+			self.cursor.execute('''DELETE FROM Room_Members''')
+		except Exception as e:
+			raise e
+		self.closeDB()
 
 	def Save(self,database):
 		self.database = database
 		self.create_db_to_use(self.database)
 		self.create_tables_to_use()
+		self.clear_tables()
 		self.insert_room_data_into_db()
 		self.insert_person_data_into_db()
 
+
 	def Load(self,database):
-		self.db_name = "{}.db".format(database)
+		if database[-3:].upper() != ".DB":
+			database+=".db"
+
+		self.db_name = "{}".format(database).upper()
+		
 		self.retieve_data_from_db_for_allocated()
 		self.retieve_data_from_db_for_unallocated()
 		self.retieve_data_from_db_for_all_rooms()
 		self.retieve_data_from_db_for_people_info()	
 		self.retieve_data_from_db_for_all_people()	
+		print "Data retrieving successful. Thank you"
+		
+		
 
 
 
