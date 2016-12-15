@@ -14,26 +14,26 @@ class Room(Storage):
 	"""
 	List_of_all_members = []
 
-	def __init__(self, Room_name = "",Room_type = ""):
-		self.Room_name = Room_name
-		self.Room_type = Room_type
+	def __init__(self, room_name = "",room_type = ""):
+		self.room_name = room_name
+		self.room_type = room_type
 		
 		#Create a variable that holds the instance of the room type created.
 
-		if self.Room_type == "OFFICE":
-			self.Room_instance =  Office(self.Room_name)
+		if self.room_type == "OFFICE":
+			self.room_instance =  Office(self.room_name)
 
 			Storage.total_no_of_rooms +=6
 			#Increment number of total room spaces by 4 for every office created.
-		elif self.Room_type == "LIVINGSPACE":
-			self.Room_instance =  LivingSpace(self.Room_name)
+		elif self.room_type == "LIVINGSPACE":
+			self.room_instance =  LivingSpace(self.room_name)
 
 			Storage.total_no_of_rooms +=4
 			#Increment number of total room spaces by 6 for every living space created.
 
 		else:
 			#Do nothing if room is neither office or livingspace
-			self.Room_instance =  LivingSpace(self.Room_name)
+			self.room_instance =  LivingSpace(self.room_name)
 			Storage.total_no_of_rooms +=4
 			#Increment number of total room spaces by 6 for every living space created.
 
@@ -52,7 +52,7 @@ class Room(Storage):
 		#1. Add to the list of current occupents in the room instance
 
 		#value = "NAME :",self.name," ID :",self.id_no
-		self.Room_instance.current_members.append(self.name)
+		self.room_instance.current_members.append(self.name)
 
 		#2. Add person to the amity people info 
 		#KEY : ID number, VALUE : NAME
@@ -60,7 +60,7 @@ class Room(Storage):
 		Storage.people_info[self.id_no] = self.name
 
 		print "Your room allocation has been successfully!!"
-		print "Your room space is in {}.".format(self.Room_name)
+		print "Your room space is in {}.".format(self.room_name)
 		print "Your ID number is {}.".format(self.id_no)
 		print "Keep it safe and Welcome to the Dojo!!\n"
 		return "Your room allocation has been successfully!!"
