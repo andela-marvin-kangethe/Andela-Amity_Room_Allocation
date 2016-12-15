@@ -26,13 +26,13 @@ Navigate to the folder
 
 ```cd Andela-Amity_Room_Allocation```
 
-Set up a virtualenv then Install packages required
-
-```pip install  -r requirements.txt```
-
 Fetch the develop branch.
 
 ```git pull origin develop```
+
+Set up a virtualenv then Install packages required
+
+```pip install  -r requirements.txt```
 
 ## Launching the Program
 
