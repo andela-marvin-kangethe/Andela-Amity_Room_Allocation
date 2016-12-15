@@ -88,12 +88,47 @@ class Amity(Storage):
 				Storage.list_of_all_people.extend([self.person])
 				#call the random room allocator.
 				#pass the person instance variables.
-				self.randomRoomAllocator(
-					self.person.name,self.person.jobType,self.person.wantsRoom,self.person.id_no)
+				if self.jobType == "FELLOW" and self.wantsRoom == "YES":
+					if self.randomOfficeAllocator(self.name) == True:
+						print 
+						self.randomRoomAllocator(
+							self.person.name,self.person.jobType,self.person.wantsRoom,self.person.id_no)
+						
+				else:
+					self.randomRoomAllocator(
+						self.person.name,self.person.jobType,self.person.wantsRoom,self.person.id_no)
 			
 			else:
 				print "Be safe at where you will stay.\n"	
 
+	def randomOfficeAllocator(self, name = ""):
+		#Set list of all rooms that are office.
+		self.offices = []
+		self.value = False
+
+		for rooms in range(0, len(Storage.list_of_all_rooms)):
+			if Storage.list_of_all_rooms[rooms].room_type == "OFFICE":
+				self.offices.append(Storage.list_of_all_rooms[rooms])
+				print "awesome."
+
+		#Do random 
+		if len(self.offices) > 0:
+			try:
+				for rooms in range(len(self.offices)):
+					room = self.offices[random.randint(0,len(self.offices)-1)]
+					if self.offices[rooms].room_instance.isFull() != True:
+						self.offices[rooms].room_instance.current_members.append(name)
+						print "Your room allocation has been successfull!!"
+						print "Your office space is in {}.".format(self.offices[rooms].room_name)
+						self.value = True
+						break
+			except Exception as e:
+				print "No offices available. sorry."			
+		else:
+			print "No offices available. Sorry."
+
+		print self.value	
+		return self.value							
 	"""
 	Create new instance of room depending on the jobtype
 	and allocate the person to that room.
@@ -153,7 +188,7 @@ class Amity(Storage):
 					#allocate the person room.
 					#check the person is not already allocated room.Doesn't exist in the system
 					if not Storage.people_info.has_key(self.id_no):
-						randomRoom.allocate_member_a_room(self.name,self.id_no)
+						randomRoom.allocate_member_a_room(self.name,self.id_no,self.jobType)
 
 
 					else:
@@ -242,7 +277,7 @@ class Amity(Storage):
 			members = Storage.list_of_all_rooms[rooms].room_instance.current_members
 			if roomType == self.jobtype and isFull == False:
 				if not Storage.people_info.has_key(self.id_no):
-					roomInstance.allocate_member_a_room(self.name,self.id_no)
+					roomInstance.allocate_member_a_room(self.name,self.id_no. self.jobtype)
 					result = True
 					break
 
@@ -272,11 +307,12 @@ class Amity(Storage):
 
 		#Reallocate person.
 		try:
+			self.value = ""
 			for rooms in range(0, len(Storage.list_of_all_rooms)):
 				if self.name_of_id_owner in Storage.list_of_all_rooms[rooms].room_instance.current_members:
 
 					Storage.list_of_all_rooms[rooms].room_instance.current_members.remove(self.name_of_id_owner)
-					print "Person removed."
+					self.value +=" You are being removed from {}".format(Storage.list_of_all_rooms[rooms].room_name)
 					break
 
 			for rooms in range(0, len(Storage.list_of_all_rooms)):
@@ -284,77 +320,13 @@ class Amity(Storage):
 				and Storage.list_of_all_rooms[rooms].room_type == self.new_room_type:
 
 					self.new_room_members.append(self.name_of_id_owner)
-					print "Person added"
+					self.value +=" and taken to {}.".format(Storage.list_of_all_rooms[rooms].room_name)
 					break
-
+			print self.value		
 		except Exception as e:
 			print "Sorry!! An error has occured. Try again later"	
 						
 
-
-		# #Check id passed exists in the system.
-		# if Storage.people_info.has_key(int(self.id_no)):
-		# #if self.id_no in Storage.people_info:
-		# 	#Set the name of the owner of the id number.
-		# 	self.name_of_id_owner = Storage.people_info[int(self.id_no)]
-		# 	#Get room details of the new room name
-		# 	for rooms in range(0, len(Storage.list_of_all_rooms)):
-		# 		#Check the room name is same with new room name
-		# 		print Storage.list_of_all_rooms[rooms].room_name," ",self.new_room_name
-		# 		print Storage.list_of_all_rooms[rooms].room_instance.current_members
-		# 		print self.name_of_id_owner
-		# 		print "\n"
-		# 		if self.name_of_id_owner in Storage.list_of_all_rooms[rooms].room_instance.current_members:
-		# 			#Set room type and room members.
-		# 			self.room_name = Storage.list_of_all_rooms[rooms].room_name
-		# 			self.room_type = Storage.list_of_all_rooms[rooms].room_type
-		# 			self.room_members = Storage.list_of_all_rooms[rooms].room_instance.current_members
-		# 			#Check for room to allocate the person.
-		# 			for otherRooms in range(
-		# 				0, len(Storage.list_of_all_people)):
-		# 				other_room_name = Storage.list_of_all_rooms[otherRooms].room_name
-		# 				other_room_type = Storage.list_of_all_rooms[otherRooms].room_type
-		# 				other_room_members = Storage.list_of_all_rooms[otherRooms].room_instance.current_members
-						
-		# 				print other_room_name," ",self.new_room_name, " ",other_room_name != self.new_room_name
-		# 				print other_room_type," ",self.room_type, " ",other_room_type == self.room_type
-		# 				print "\n"
-		# 				if  other_room_name != self.new_room_name \
-		# 				and other_room_type == self.room_type:
-		# 				# and self.name_of_id_owner not in other_room_members:
-		# 					#remove member from the old room.
-		# 					print ">>Moving you to room : {}".format(
-		# 						self.room_name)
-		# 					print self.room_members
-		# 					print other_room_members
-		# 					self.room_members.remove(self.name_of_id_owner)
-		# 					#append member to new room
-		# 					other_room_members.append(self.name_of_id_owner)
-		# 					print self.room_members
-		# 					print other_room_members
-							
-		# 					#print success, message.
-		# 					print  "Reallocation successfull!! "
-		# 					return "Reallocation successfull!! "
-
-		# 				elif otherRooms +1 == len(Storage.list_of_all_rooms):
-		# 					print "Sorry!! We can't reallocate you at current time."
-		# 					return None
-		# 				else:
-		# 					continue		
-
-
-
-		# 		elif rooms +1 == len(Storage.list_of_all_rooms):
-		# 			print "Sorry!! We can't reallocate you at this time.."
-		# 			return None	
-		# 		else:
-		# 			continue	
-		# else:
-		# 	print "Sorry!! We can't reallocate you at this time."
-		# 	return None	
-
-	
 				
 	"""
 	Load all people from a file. and does the allocations.
@@ -381,8 +353,6 @@ class Amity(Storage):
 		else:
 			
 			print "No file with that name exist."			
-
-
 
 	"""
 	Print unallocated people.
@@ -476,28 +446,26 @@ class Amity(Storage):
 			print "No existing rooms to allocate anyone."
 
 
-
-		#Write on the 			
-
-
-	
 	def print_rooms(self, room_name):
 		self.room_name = room_name.upper()
+		self.value = False
 		for size in range(len(Storage.list_of_all_rooms)):
 			if self.room_name == Storage.list_of_all_rooms[size].room_name:
+				self.value = True
 				if len(Storage.list_of_all_rooms[size].room_instance.current_members) > 0:
 					for rooms in range(
 						0, len(
 							Storage.list_of_all_rooms[size].room_instance.current_members)):
 						print "{}. {}".format(
 							rooms+1, Storage.list_of_all_rooms[size].room_instance.current_members[rooms])
+
 				else:
 					print "Room is empty."
 					break
 					return None		
 			else:
-				if size+1 == len(Storage.list_of_all_rooms):
-					#print "Sorry!! That room doesn't exist."
+				if size+1 == len(Storage.list_of_all_rooms) and self.value == False:
+					print "Sorry!! That room doesn't exist."
 					break	
 					return None			
 					
