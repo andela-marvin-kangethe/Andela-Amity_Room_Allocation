@@ -12,6 +12,8 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/d8f495a7f1d64cdda55984b43ae6614a)](https://www.codacy.com/app/marvin-kangethe/Andela-Amity_Room_Allocation?utm_source=github.com&utm_medium=referral&utm_content=andela-marvin-kangethe/Andela-Amity_Room_Allocation&utm_campaign=Badge_Coverage)
 
+[![Code Health](https://landscape.io/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/develop/landscape.svg?style=flat)](https://landscape.io/github/andela-marvin-kangethe/Andela-Amity_Room_Allocation/develop)
+
 # Andela-Amity_Room_Allocation
 
 Amity has rooms which can be offices or living spaces. An office can occupy a maximum of 6 people. A living space can inhabit a maximum of 4 people.
