@@ -17,6 +17,7 @@ class Person(Storage):
 		self.new_id_no = new_id_no
 
 		if self.choice == 0:
+			#self.id_no = 1234
 			self.id_no = self.generate_ID(self.name)
 		else:
 			self.id_no = self.new_id_no	
