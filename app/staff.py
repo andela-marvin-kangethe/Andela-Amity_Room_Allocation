@@ -15,5 +15,4 @@ class Staff(object):
         self.id_no = id_no
         if Storage.people_info.has_key(self.id_no):
 			return True
-		# else:
-		# 	return False
+		
